@@ -1,0 +1,13 @@
+name: Sprint Reporter
+description: Automatiza resumen de tareas cerradas de Jira a Confluence
+agents:
+  - jira_extractor
+  - sprint_analyzer
+  - confluence_publisher
+tasks:
+  - extract_task
+  - analyze_task
+  - publish_task
+process: sequential
+verbose: 2
+memory: true

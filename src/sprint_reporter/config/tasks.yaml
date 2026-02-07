@@ -1,0 +1,28 @@
+extract_task:
+  description: Extrae las tareas cerradas del sprint {sprint_id} usando la herramienta Jira.
+  expected_output: Lista detallada de todas las tareas cerradas con summaries, dependencias y epics.
+  agent: jira_extractor
+
+analyze_task:
+  description: |
+    Analiza los datos extraídos:
+    - Qué se ha completado (agrupa por tipo/epic).
+    - Impactos: qué áreas/productos afecta.
+    - Dependencias: links resueltos o pendientes.
+    - Métricas: total tareas, tiempo estimado vs real si disponible.
+    - Resumen ejecutivo y recomendaciones.
+  expected_output: Reporte estructurado en markdown listo para Confluence.
+  agent: sprint_analyzer
+  context:
+    - extract_task
+
+publish_task:
+  description: |
+    Publica el análisis en Confluence:
+    - Space: {space_key}
+    - Title: Resumen Sprint {sprint_id} - Cerradas
+    - Body: Usa headings, tablas para tareas/dependencias, colores si posible.
+  expected_output: Confirmación de página creada/actualizada con URL.
+  agent: confluence_publisher
+  context:
+    - analyze_task
