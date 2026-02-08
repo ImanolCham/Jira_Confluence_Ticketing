@@ -1,24 +1,14 @@
 [project]
 name = "sprint_reporter"
 version = "0.1.0"
-description = "sprint_reporter using crewAI"
-authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<3.14"
+description = "Sprint Reporter Jira to Confluence"
+requires-python = ">=3.12"
 dependencies = [
-    "crewai[tools]==1.6.1"
+  "crewai[tools]",
+  "atlassian-python-api",
+  "python-dotenv",
+  "openai"
 ]
 
 [project.scripts]
-sprint_reporter = "sprint_reporter.main:run"
-run_crew = "sprint_reporter.main:run"
-train = "sprint_reporter.main:train"
-replay = "sprint_reporter.main:replay"
-test = "sprint_reporter.main:test"
-run_with_trigger = "sprint_reporter.main:run_with_trigger"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.crewai]
-type = "crew"
+run_crew = "sprint_reporter.main:main"  # ← CLAVE: apunta a función main()
