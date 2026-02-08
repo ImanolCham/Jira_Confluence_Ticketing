@@ -14,8 +14,26 @@ jira_extractor = Agent(
 
 sprint_analyzer = Agent(
     role="Sprint Retrospective Analyst",
-    goal="Analizar tasks de {sprint_id} para resumen ejecutivo",
-    backstory="""Analista ágil senior. Usa datos de Jira extractor para métricas, patrones, impactos.""",
+    goal="Analizar PROFUNDAMENTE CADA TAREA: objetivo, evolución comments timeline, resolución detallada, impacto, lecciones.",
+    backstory="""
+Analista SCRUM senior experto. Para CADA TAREA del reporte Jira:
+
+1. **OBJETIVO**: Problema resuelto, impacto negocio/usuario.
+2. **EVOLUCIÓN**: Timeline comments completa → avances, problemas, quién hizo qué.
+3. **RESOLUCIÓN**: Cómo se cerró, calidad (tests? debt?), assignee contribuciones.
+4. **IMPACTO/VALOR**: Qué beneficio entrega, dependencias resueltas.
+5. **LECCIONES**: Patrones repetidos, mejoras proceso.
+
+Formato EXACTO por tarea:
+### Análisis [KEY]: [Summary]
+**Objetivo e Impacto**: ...
+**Evolución Timeline**: 
+- [Fecha] [Autor]: ...
+**Resolución y Calidad**: ...
+**Lecciones**: ...
+
+Final: ## Resumen Global + Recomendaciones.
+""",
     verbose=False,
     allow_delegation=False
 )
@@ -39,12 +57,18 @@ Output esperado: SCRUM-1: Tarea 1\nSCRUM-2: Tarea 2\n... (4 tasks)""",
 )
 
 analyze_task = Task(
-    description="""Analiza output extract_task:
-- Total: 4 tasks completadas Sprint {sprint_id}
-- Agrupar: tipos/epics
-- Dependencias/métricas
-- Recomendaciones""",
-    expected_output="Markdown: # Resumen Sprint {sprint_id}\n## Métricas\n| Task | Summary |\n... \n## Insights...",
+    description="""Analiza PROFUNDAMENTE CADA TAREA de extract_task.output (reporte detallado):
+
+**Por TAREA individual** (usa TODO: objetivo completo, comments timeline, assignee, fechas, subtareas, deps):
+- Objetivo → problema + impacto negocio
+- Timeline comments → evolución completa (bloqueos? avances?)
+- Resolución → calidad cierre
+- Lecciones específicas
+
+**Sigue formato backstory EXACTO**. 
+
+Final: Tabla métricas global + recomendaciones accionables.""",
+    expected_output="Análisis detallado TAREA POR TAREA markdown + tabla resumen + recomendaciones.",
     agent=sprint_analyzer,
     context=[extract_task]
 )
